@@ -47,7 +47,7 @@ const Menu: React.FC = () => {
         setActiveIndex({ activeIndex : newActiveIndex })
     }
 
-    const renderLood = () => {
+    const renderValitudLugu = () => {
         if(playlist.length) {
             return (
                 <ValitudLugu lugu={playlist[activeIndex]}/>
@@ -60,7 +60,7 @@ const Menu: React.FC = () => {
         <div className="menu">
             {/* valitud loo preview */}
             <div className="container1">
-                {renderLood()}
+                {renderValitudLugu()}
                 <p style={{paddingTop: '200px'}}>Playing: 50 cent - Candy Shop</p>
             </div>
             {/* lugude list */}
