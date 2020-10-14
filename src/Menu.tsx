@@ -40,11 +40,11 @@ const Menu: React.FC = () => {
     
     
 
-    const [activeIndex, setActiveIndex] = useState<number>(0);
+    const [activeIndex, setActiveIndex] = useState(0);
 
     const handleClick = (e:any) => {
-        const newActiveIndex : number = e.target.getAttribute('data-index')
-        setActiveIndex({ activeIndex : newActiveIndex })
+        const newActiveIndex = e.target.getAttribute('data-index')
+        setActiveIndex( newActiveIndex )
     }
 
     const renderValitudLugu = () => {
@@ -56,12 +56,23 @@ const Menu: React.FC = () => {
         return null
     };
 
+    const renderValitudTekst = () => {
+        if(playlist.length) {
+            return (
+                    <p>{(`Now playing: ${playlist[activeIndex].laulja} - ${playlist[activeIndex].looNimi}`)}</p>
+            )
+        }
+        return null
+    };
+    
+    
+
     return(
         <div className="menu">
             {/* valitud loo preview */}
             <div className="container1">
                 {renderValitudLugu()}
-                <p style={{paddingTop: '200px'}}>Playing: 50 cent - Candy Shop</p>
+                <p style={{paddingTop: '350px'}}>{renderValitudTekst()}</p>
             </div>
             {/* lugude list */}
             <div className="container2">
