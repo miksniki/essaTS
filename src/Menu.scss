@@ -1,0 +1,27 @@
+.menu {
+    display: flex;
+}
+
+.container1 {
+    flex: 4;
+    margin-top: 100px;
+    margin-left: 60px;
+    p {
+        height: 50px;
+        background-color: thistle;
+        text-align: center;
+        font-weight: bold;
+        font-size: 30px
+    }
+}
+
+.container2 {
+    flex: 4;     
+    h1 {
+        height: 80px;
+        text-align: center;
+        color: white;
+        padding-bottom: 21.4px;
+        background: rgb(116, 29, 94)
+    }
+}
