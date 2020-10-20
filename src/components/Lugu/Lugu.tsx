@@ -1,13 +1,13 @@
 import React from 'react';
 import './Lugu.scss';
 
-interface IProps {
+type Props = {
     looPilt: string;
     handleClick: any;
     index: number
 }
 
-const Lugu: React.FC<IProps> = ({ looPilt, handleClick, index }) => {
+const Lugu: React.FC<Props> = ({ looPilt, handleClick, index }) => {
     return (
         <div>
            <img 

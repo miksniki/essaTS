@@ -1,7 +1,12 @@
 import React from 'react';
 import Lugu from '../Lugu/Lugu';
 
-const Lood: React.FC<any> = ({ playlist, handleClick }) => {
+type Props = {
+    playlist: any[];
+    handleClick: any;
+}
+
+const Lood: React.FC<Props> = ({ playlist, handleClick }) => {
     return (
         <div>
             <div>
