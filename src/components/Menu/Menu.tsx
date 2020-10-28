@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, FC } from 'react';
 import { useForm } from 'react-hook-form';
 import Lood from '../Lood/Lood';
 import ValitudLugu from '../ValitudLugu/ValitudLugu';
+
 import './Menu.scss';
 
 const playlist = require('../../songPlaylist.json');
@@ -10,7 +11,8 @@ const playlist = require('../../songPlaylist.json');
 const Menu: FC = () => {
     
     const [activeIndex, setActiveIndex] = useState<number>(0);
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit } = useForm<any>();
+    const [uploadedFile, setUploadedFile] = useState<any>(null);
 
     const handleClick = (e:any) => {
         const newActiveIndex = e.target.getAttribute('data-index')
@@ -50,8 +52,11 @@ const Menu: FC = () => {
             method: "POST",
             body: formData
         }).then(res => res.json())
-        alert(JSON.stringify(res))
+        alert(JSON.stringify(res));
+        
+        setUploadedFile(data.file[0])
     }
+
 
     return(
         <div className="menu">
@@ -66,12 +71,24 @@ const Menu: FC = () => {
                 <h1>Pick a song!</h1>
                 <Lood playlist={playlist} handleClick={handleClick}/>
             </div>
-            {/* lugude upload */}
+            {/* lugude uploadi form */}
             <div>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <input ref={register} type="file" name="file" />
                     <button>Submit</button>
                 </form>
+                {console.log(uploadedFile)}
+            </div>
+            {/* uploaditud lugude sektsioon */}
+            <div>
+                {uploadedFile ? (
+                <div>
+                    <div>
+                        <h1>{uploadedFile.name}</h1>
+                        <audio src={uploadedFile} autoPlay controls />                          
+                    </div>
+                </div>
+                ) : null}
             </div>
         </div>
     )
