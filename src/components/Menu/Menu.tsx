@@ -12,11 +12,33 @@ const Menu: FC = () => {
     
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const { register, handleSubmit } = useForm<any>();
-    const [uploadedFile, setUploadedFile] = useState<any>(null);
+    const [uploadedFile, setUploadedFile] = useState<any>([]);
+
+    const musicRef = useRef<HTMLAudioElement>(null);
+
+    useEffect(() => {
+        if(musicRef.current)
+            musicRef.current.src = playlist[activeIndex].heliFail
+    }, [activeIndex]);
 
     const handleClick = (e:any) => {
         const newActiveIndex = e.target.getAttribute('data-index')
         setActiveIndex( newActiveIndex )
+    };
+
+    const onSubmit = async (data:any) => {
+        const formData = new FormData();
+        for (let i = 0; i < data.length; i ++) {
+        formData.append(`file[${i}]`, data.file[i]);
+        };
+
+        const res = await fetch('http://localhost:5000/upload', {
+            method: "POST",
+            body: formData
+        }).then(res => res.json())
+        alert(JSON.stringify(res));
+        
+        setUploadedFile(data.file);
     };
 
     const renderValitudLugu = () => {
@@ -36,27 +58,6 @@ const Menu: FC = () => {
         }
         return null
     };
-    
-    const musicRef = useRef<HTMLAudioElement>(null);
-
-    useEffect(() => {
-        if(musicRef.current)
-            musicRef.current.src = playlist[activeIndex].heliFail
-    }, [activeIndex]);
-
-    const onSubmit = async (data:any) => {
-        const formData = new FormData();
-        formData.append('file', data.file[0]);
-
-        const res = await fetch('http://localhost:5000/upload', {
-            method: "POST",
-            body: formData
-        }).then(res => res.json())
-        alert(JSON.stringify(res));
-        
-        setUploadedFile(data.file[0])
-    }
-
 
     return(
         <div className="menu">
@@ -74,18 +75,18 @@ const Menu: FC = () => {
             {/* lugude uploadi form */}
             <div>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <input ref={register} type="file" name="file" />
+                    <input ref={register} type="file" name="file" accept="audio/mpeg" multiple />
                     <button>Submit</button>
                 </form>
-                {console.log(uploadedFile)}
             </div>
+            {console.log(uploadedFile)}
             {/* uploaditud lugude sektsioon */}
             <div>
                 {uploadedFile ? (
                 <div>
                     <div>
                         <h1>{uploadedFile.name}</h1>
-                        <audio src={uploadedFile} autoPlay controls />                          
+                        <audio src={'/' + uploadedFile.name} autoPlay controls />                          
                     </div>
                 </div>
                 ) : null}

@@ -1,19 +1,16 @@
 const express = require('express');
 const path = require('path');
-const ffmpeg = require('fluent-ffmpeg');
+// const ffmpeg = require('fluent-ffmpeg');
 const fileUpload = require('express-fileupload')
 const cors = require('cors');
 const morgan = require('morgan');
-//const mime =  require('mime') //
-
-// mime.getType('audio/mpeg') //
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'build')));
-
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'uploads')));
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // File upload 
@@ -26,14 +23,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
-
 app.post('/upload', async (req, res) => {
-    try {
-        if(!req.files) {       
-            res.send({
-                message: 'No files uploaded'
-            });
-        } else {
+    if(!req.files) {       
+        res.send({
+            message: 'No files uploaded'
+        });
+    } else {
+        try {
             const {file} = req.files
 
             file.mv('uploads/' + file.name) 
@@ -41,10 +37,10 @@ app.post('/upload', async (req, res) => {
             res.send({
                 message: 'file is uploaded'
             })
+        } catch (e) {
+            res.status(500).send(e)
         }
-    } catch (e) {
-        res.status(500).send(e)
-    }
+    } 
 });
 
 // FFMPEG configuration
