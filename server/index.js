@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const ffmpeg = require('fluent-ffmpeg');
+// const ffmpeg = require('fluent-ffmpeg');
 const fileUpload = require('express-fileupload')
 const cors = require('cors');
 const morgan = require('morgan');
@@ -45,10 +45,13 @@ app.post('/upload', async (req, res) => {
     }
 });
 
+app.get('/getFiles', async (req, res) => {
+    res.sendFile(path.join(__dirname, `./uploads/${req.files}`))
+})
+
 {/* app.post('/upload/:filename/:action', async (req, res) => {
     const filename = req.params.filename
-    if (req.params.action === 'split') 
-    if(!req.files) {       
+    if (req.params.action === 'split') {       
         res.send({
             message: 'No files uploaded'
         }); */ }

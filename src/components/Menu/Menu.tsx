@@ -28,16 +28,23 @@ const Menu: FC = () => {
 
     const onSubmit = async (data:any) => {
         const formData = new FormData();
-        formData.append(`file`, data.file[0]);
+        formData.append('file', data.file[0]);
 
         const res = await fetch('http://localhost:5000/upload', {
             method: "POST",
             body: formData
         }).then(res => res.json())
         alert(JSON.stringify(res));
-        
-        setUploadedFile(data.file[0]);
+
+        setUploadedFile(res);
     };
+
+    // const getFiles = async (files:any) => {
+    //     const res = await fetch('http://localhost:5000/getFiles', {
+    //         method: "GET"
+    //     }).then(res => res.json())
+    //     alert(JSON.stringify(res));
+    // };
 
  {/*   const splitAudio = async (filename:any) => {
         const res = fetch('/audio/'+filename+'/split', {
@@ -64,6 +71,12 @@ const Menu: FC = () => {
         return null
     };
 
+    const getFiles = async () => {
+        await fetch('http:localhost:5000/getFiles')
+            .then(response => response.json())
+            .then(data => setUploadedFile(data))
+    }
+
     return(
         <div className="menu">
             {/* valitud loo preview */}
@@ -80,19 +93,24 @@ const Menu: FC = () => {
             {/* lugude uploadi form */}
             <div>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <input ref={register} type="file" name="file" accept="audio/mpeg" multiple />
+                    <input ref={register} type="file" name="file" accept="audio/mpeg" />
                     <button>Submit</button>
                 </form>
             </div>
-            {console.log(uploadedFile)}
+
             {/* uploaditud lugude sektsioon */}
+ 
+            {console.log(uploadedFile)}
             <div>
+                <button onClick={getFiles}>Show uploaded songs</button>
                 {uploadedFile ? (
                 <div>
-                    <div>
-                        <h1>{uploadedFile.name}</h1>
-                        <audio src={'/' + uploadedFile.name} autoPlay controls />                          
-                    </div>
+                        {uploadedFile.map((file:any) => 
+                        <div>
+                            <h1>{file.name}</h1>
+                            <audio src={'/' + file.name} controls />  
+                        </div>
+                        )}                        
                 </div>
                 ) : null}
             </div>
