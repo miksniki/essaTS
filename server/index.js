@@ -23,7 +23,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
-app.post('/upload', async (req, res) => {
+app.post('/upload/:filename/:action', async (req, res) => {
+    const filename = req.params.filename
+    if (req.params.action === 'split') 
     if(!req.files) {       
         res.send({
             message: 'No files uploaded'
