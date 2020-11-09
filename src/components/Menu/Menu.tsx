@@ -28,7 +28,7 @@ const Menu: FC = () => {
 
     const onSubmit = async (data:any) => {
         const formData = new FormData();
-        formData.append(`file`, data.file[0];
+        formData.append(`file`, data.file[0]);
 
         const res = await fetch('http://localhost:5000/upload', {
             method: "POST",
@@ -39,12 +39,12 @@ const Menu: FC = () => {
         setUploadedFile(data.file[0]);
     };
 
-    const splitAudio = async (filename:any) => {
+ {/*   const splitAudio = async (filename:any) => {
         const res = fetch('/audio/'+filename+'/split', {
             method: "POST"
         }).then(res => res.json())
         alert(JSON.stringify(res));
-    };
+    }; */}
 
     const renderValitudLugu = () => {
         if(playlist.length) {
@@ -63,9 +63,7 @@ const Menu: FC = () => {
         }
         return null
     };
-    const splitAudio = async (filename) => {
-        fetch('/audio/'+filename+'/split')
-    }
+
     return(
         <div className="menu">
             {/* valitud loo preview */}
