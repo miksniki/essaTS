@@ -75,7 +75,7 @@ const Menu: FC = () => {
         await fetch('http:localhost:5000/getFiles')
             .then(response => response.json())
             .then(data => setUploadedFile(data))
-    }
+    };
 
     return(
         <div className="menu">
