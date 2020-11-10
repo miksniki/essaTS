@@ -34,9 +34,7 @@ const Menu: FC = () => {
             method: "POST",
             body: formData
         }).then(res => res.json())
-        alert(JSON.stringify(res));
-
-        setUploadedFile(res);
+        alert(JSON.stringify(res))
     };
 
     // const getFiles = async (files:any) => {
