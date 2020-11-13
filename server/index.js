@@ -4,6 +4,7 @@ const path = require('path');
 const fileUpload = require('express-fileupload')
 const cors = require('cors');
 const morgan = require('morgan');
+const fs = require('fs');
 
 
 const app = express();
@@ -27,7 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-app.post('/upload', async (req, res, next) => {
+app.post('/upload', async (req, res) => {
         if(!req.files) {       
             res.send({
                 message: 'No files uploaded'
@@ -45,13 +46,21 @@ app.post('/upload', async (req, res, next) => {
                 res.status(500).send(e)
             }
         }
-        next()
 });
 
+const uploads = './uploads';
+songs = [];
+function readDirectory(callback) {
+    fs.readdir(uploads, (err, files) => {
+        songs.push(files);
+        callback(songs);
+    });
+}
 
 app.get('/songs', (req, res) => {
-    const songs = (__dirname + '/uploads');
-    res.json(songs)
+    readDirectory(function(songFiles) {
+        res.json({files: songFiles})
+    });
 });
 
  /* app.post('/upload/:filename/:action', async (req, res) => {
