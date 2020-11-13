@@ -9,10 +9,12 @@ const morgan = require('morgan');
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'uploads')));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
 
 // File upload 
 
@@ -25,36 +27,39 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-app.post('/upload', async (req, res) => {
-    try {
+app.post('/upload', async (req, res, next) => {
         if(!req.files) {       
             res.send({
                 message: 'No files uploaded'
             });
         } else {
-            const {file} = req.files
+            try {
+                const {file} = req.files
 
-            file.mv('uploads/' + file.name) 
+                file.mv('uploads/' + file.name) 
 
-            res.send({
-                message: 'file is uploaded'
-            })
+                res.send({
+                    message: 'file is uploaded'
+                })
+            } catch (e) {
+                res.status(500).send(e)
+            }
         }
-    } catch (e) {
-        res.status(500).send(e)
-    }
+        next()
 });
 
-app.get('/getFiles', async (req, res) => {
-    res.sendFile(path.join(__dirname, `./uploads/${req.files}`))
-})
 
-{/* app.post('/upload/:filename/:action', async (req, res) => {
+app.get('/songs', (req, res) => {
+    const songs = (__dirname + '/uploads');
+    res.json(songs)
+});
+
+ /* app.post('/upload/:filename/:action', async (req, res) => {
     const filename = req.params.filename
     if (req.params.action === 'split') {       
         res.send({
             message: 'No files uploaded'
-        }); */ }
+        }); */ 
 
 // FFMPEG configuration
 

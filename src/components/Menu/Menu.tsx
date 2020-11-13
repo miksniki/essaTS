@@ -70,9 +70,9 @@ const Menu: FC = () => {
     };
 
     const getFiles = async () => {
-        await fetch('http:localhost:5000/getFiles')
-            .then(response => response.json())
-            .then(data => setUploadedFile(data))
+        await fetch('http://localhost:5000/songs')
+            .then(res => res.json())
+            .then(songs => setUploadedFile(songs))
     };
 
     return(
