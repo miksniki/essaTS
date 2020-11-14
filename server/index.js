@@ -5,12 +5,14 @@ const fileUpload = require('express-fileupload')
 const cors = require('cors');
 const morgan = require('morgan');
 const fs = require('fs');
+const ffmpeg = require('ffmpeg');
 
 
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.join(__dirname, 'edited')));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -38,7 +40,7 @@ app.post('/upload', async (req, res) => {
                 const {file} = req.files
 
                 file.mv('uploads/' + file.name) 
-
+               
                 res.send({
                     message: 'file is uploaded'
                 })
@@ -63,16 +65,29 @@ app.get('/songs', (req, res) => {
     });
 });
 
- /* app.post('/upload/:filename/:action', async (req, res) => {
-    const filename = req.params.filename
-    if (req.params.action === 'split') {       
-        res.send({
-            message: 'No files uploaded'
-        }); */ 
-
 // FFMPEG configuration
 
+app.post('/split/:filename/:action', async (req, res) => {
+     const file = req.params.filename
+     
 
-//
+     if (req.params.action === 'split') {       
+         ffmpeg.ffprobe(file, (err, metaData) => {
+             const {duration} = metaData.format;
+             const startingTime = duration;
+             const clipDuration = parseInt(duration / 2);
+
+             ffmpeg()
+                 .input(file)
+                 .inputOption([ `-ss ${startingTime}` ])
+                 .outputOptions([ `-t ${clipDuration}`])
+                 .output(`./edited/${file}Edit.mp3`)
+                 .on('end', () => console.log('Split successful!'))
+                 .on('error', (err) => console.log(err))         
+                 .run();
+        })
+     }
+ })
+
 
 app.listen(5000);

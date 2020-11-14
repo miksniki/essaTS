@@ -13,6 +13,7 @@ const Menu: FC = () => {
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const { register, handleSubmit } = useForm<any>();
     const [uploadedFile, setUploadedFile] = useState<any>();
+    const [editSong, setEditSong] = useState<any>();
 
     const musicRef = useRef<HTMLAudioElement>(null);
 
@@ -37,20 +38,6 @@ const Menu: FC = () => {
         alert(JSON.stringify(res))
     };
 
-    // const getFiles = async (files:any) => {
-    //     const res = await fetch('http://localhost:5000/getFiles', {
-    //         method: "GET"
-    //     }).then(res => res.json())
-    //     alert(JSON.stringify(res));
-    // };
-
- {/*   const splitAudio = async (filename:any) => {
-        const res = fetch('/audio/'+filename+'/split', {
-            method: "POST"
-        }).then(res => res.json())
-        alert(JSON.stringify(res));
-    }; */}
-
     const renderValitudLugu = () => {
         if(playlist.length) {
             return (
@@ -68,12 +55,25 @@ const Menu: FC = () => {
         }
         return null
     };
-
+       
     const getFiles = async () => {
         await fetch('http://localhost:5000/songs')
             .then(res => res.json())
             .then(files => setUploadedFile(files))
     };
+
+     const splitAudio = async (filename:any) => {
+         filename = editSong;
+         const data = new FormData();
+         data.append('filename', filename.file[0]);
+
+         const res = fetch('http://localhost:5000/split/'+filename+'/split', {
+             method: "POST",
+             body: data
+         }).then(res => res.json())
+         alert(JSON.stringify(res));
+    }; 
+
 
     return(
         <div className="menu">
@@ -106,7 +106,8 @@ const Menu: FC = () => {
                     {uploadedFile.files.map((array:any) => array.map((file:any) => 
                         <div>
                             <h1>{file}</h1>
-                            <audio src={'/' + file} controls />  
+                            <audio src={'/' + file} controls />
+                            <button onClick={splitAudio}>Split audio</button> 
                         </div>
                     ))}
                 </div>
