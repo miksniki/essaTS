@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-// const ffmpeg = require('fluent-ffmpeg');
+const ffmpeg = require('fluent-ffmpeg');
 const fileUpload = require('express-fileupload')
 const cors = require('cors');
 const morgan = require('morgan');
@@ -67,8 +67,8 @@ app.get('/songs', (req, res) => {
 
 // FFMPEG configuration
 
-app.post('/split/:filename/:action', async (req, res) => {
-     const file = req.params.filename
+app.post('/split/:file/:action', async (req, res) => {
+     const file = req.files
      
 
      if (req.params.action === 'split') {       

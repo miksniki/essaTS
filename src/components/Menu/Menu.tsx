@@ -62,17 +62,21 @@ const Menu: FC = () => {
             .then(files => setUploadedFile(files))
     };
 
-     const splitAudio = async (filename:any) => {
-         filename = editSong;
-         const data = new FormData();
-         data.append('filename', filename.file[0]);
+    const splitAudio = async () => {
+        let file = editSong;    /* editsong on state */
+        let data = new FormData();
+        data.append('file', file)
 
-         const res = fetch('http://localhost:5000/split/'+filename+'/split', {
-             method: "POST",
-             body: data
-         }).then(res => res.json())
-         alert(JSON.stringify(res));
-    }; 
+        fetch(`http://localhost:5000/split/'${file}/split`, {    
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: { 'Content-type': 'application/json'}
+        })
+        .then(res => res.json())
+        .then(function(data){alert(JSON.stringify(data))
+        console.warn(data)
+        })
+    }
 
 
     return(
@@ -108,6 +112,8 @@ const Menu: FC = () => {
                             <h1>{file}</h1>
                             <audio src={'/' + file} controls />
                             <button onClick={splitAudio}>Split audio</button> 
+                            {/* TAHAN SIIN SETSTATE EDITSONG  */}
+                            {setEditSong(file)}
                         </div>
                     ))}
                 </div>
