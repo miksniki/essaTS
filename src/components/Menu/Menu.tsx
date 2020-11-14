@@ -12,7 +12,7 @@ const Menu: FC = () => {
     
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const { register, handleSubmit } = useForm<any>();
-    const [uploadedFile, setUploadedFile] = useState<any>([]);
+    const [uploadedFile, setUploadedFile] = useState<any>();
 
     const musicRef = useRef<HTMLAudioElement>(null);
 
@@ -103,12 +103,12 @@ const Menu: FC = () => {
                 <button onClick={getFiles}>Show uploaded songs</button>
                 {uploadedFile ? (
                 <div>
-                        {uploadedFile.map((file:any) => 
+                    {uploadedFile.files.map((array:any) => array.map((file:any) => 
                         <div>
-                            <h1>{file.name}</h1>
-                            <audio src={'/' + file.name} controls />  
+                            <h1>{file}</h1>
+                            <audio src={'/' + file} controls />  
                         </div>
-                        )}                        
+                    ))}
                 </div>
                 ) : null}
             </div>

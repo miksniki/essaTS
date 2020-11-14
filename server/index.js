@@ -59,7 +59,7 @@ function readDirectory(callback) {
 
 app.get('/songs', (req, res) => {
     readDirectory(function(songFiles) {
-        res.json({files: songFiles})
+        res.send({files: songFiles})
     });
 });
 
