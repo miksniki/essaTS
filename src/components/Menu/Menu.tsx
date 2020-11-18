@@ -5,6 +5,7 @@ import ValitudLugu from '../ValitudLugu/ValitudLugu';
 
 import './Menu.scss';
 
+const axios = require('axios');
 const playlist = require('../../songPlaylist.json');
 
 
@@ -12,13 +13,12 @@ const Menu: FC = () => {
     
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const { register, handleSubmit } = useForm<any>();
-    const [uploadedFile, setUploadedFile] = useState<any>();
-    const [editSong, setEditSong] = useState<any>();
+    const [uploadedFiles, setUploadedFile] = useState<any>();
 
     const musicRef = useRef<HTMLAudioElement>(null);
 
     useEffect(() => {
-        if(musicRef.current)
+        if(musicRef.current && musicRef.current.src !== playlist[activeIndex].heliFail)
             musicRef.current.src = playlist[activeIndex].heliFail
     }, [activeIndex]);
 
@@ -38,53 +38,57 @@ const Menu: FC = () => {
         alert(JSON.stringify(res))
     };
 
-    const renderValitudLugu = () => {
-        if(playlist.length) {
-            return (
-                <ValitudLugu lugu={playlist[activeIndex]}/>
-            )
-        }
-        return null
-    };
-
-    const renderValitudTekst = () => {
-        if(playlist.length) {
-            return (
-                    <p>{(`Now playing: ${playlist[activeIndex].laulja} - ${playlist[activeIndex].looNimi}`)}</p>
-            )
-        }
-        return null
-    };
-       
     const getFiles = async () => {
         await fetch('http://localhost:5000/songs')
             .then(res => res.json())
-            .then(files => setUploadedFile(files))
+            .then(files => setUploadedFile(files.files))
     };
 
-    const splitAudio = async () => {
-        let file = editSong;    /* editsong on state */
-        let data = new FormData();
-        data.append('file', file)
-
-        fetch(`http://localhost:5000/split/'${file}/split`, {    
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: { 'Content-type': 'application/json'}
-        })
-        .then(res => res.json())
-        .then(function(data){alert(JSON.stringify(data))
-        console.warn(data)
+    const splitAudio = async (fileName: string) => {
+        fetch(`http://localhost:5000/${fileName}/split`) 
+            .then(res => res.json())
+            .then(function(data){alert(JSON.stringify(data))
+            console.warn(data)
         })
     }
 
+    const [valitudLood, setValitudLood] = useState<any>([]);
+    const [editedSongs, setEditedSongs] = useState<any>();
 
+    const getEditedFiles = async () => {
+        await fetch('http://localhost:5000/editedSongs')
+            .then(res => res.json())
+            .then(files => setEditedSongs(files.files))
+    };
+
+    const checkboxChange = (e:any) => {
+        let checkedSongs = [...valitudLood, e.target.value];
+        if(valitudLood.includes(e.target.value )) {
+            checkedSongs = checkedSongs.filter(file => file !== e.target.value);
+        }
+        setValitudLood(checkedSongs)
+    }
+
+    const concatAudio = (valitudLood:any) => {
+        if (valitudLood.length === 2){
+            axios({
+            method: "POST",
+            url: 'http://localhost:5000/concat',
+            data: valitudLood
+            })
+        } else {
+            alert("You need to select 2 songs!")
+        }
+    }  
+    
     return(
         <div className="menu">
             {/* valitud loo preview */}
             <div className="container1">
-                {renderValitudLugu()}
-                <p style={{paddingTop: '350px'}}>{renderValitudTekst()}</p>
+                {playlist.length &&  <ValitudLugu lugu={playlist[activeIndex]}/>}
+                <p style={{paddingTop: '350px'}}>
+                    {playlist.length && 
+                    <p>{(`Now playing: ${playlist[activeIndex].laulja} - ${playlist[activeIndex].looNimi}`)}</p>}</p>
                 <audio ref={musicRef} autoPlay controls />
             </div>
             {/* lugude list */}
@@ -101,22 +105,35 @@ const Menu: FC = () => {
             </div>
 
             {/* uploaditud lugude sektsioon */}
- 
-            {console.log(uploadedFile)}
             <div>
                 <button onClick={getFiles}>Show uploaded songs</button>
-                {uploadedFile ? (
+                {uploadedFiles ? (
                 <div>
-                    {uploadedFile.files.map((array:any) => array.map((file:any) => 
-                        <div>
-                            <h1>{file}</h1>
-                            <audio src={'/' + file} controls />
-                            <button onClick={splitAudio}>Split audio</button> 
-                            {/* TAHAN SIIN SETSTATE EDITSONG  */}
-                            {setEditSong(file)}
+                    {uploadedFiles.map((fileName: string) =>
+                        <div className="uploadedSongs">
+                            <h1>
+                                {fileName}
+                                <input type="checkbox" id={fileName} value={fileName} onChange={checkboxChange}></input>
+                            </h1>
+                            <audio src={'/' + fileName} controls />
+                            <button onClick={() => splitAudio(fileName)}>Split audio</button>                           
                         </div>
-                    ))}
-                </div>
+                    )}
+                    <button onClick={() => concatAudio(valitudLood)}>Concat selected songs</button>
+                    <button onClick={getEditedFiles}>Show edited songs</button>
+                    {editedSongs ? (
+                    <div>
+                        {editedSongs.map((fileName: string) => 
+                        <div className="editedSongs">
+                            <h1>
+                            {fileName}
+                            </h1>
+                            <audio src={'/' + fileName} controls />
+                        </div>
+                        )}
+                    </div>
+                    ): null}
+                    </div>               
                 ) : null}
             </div>
         </div>
