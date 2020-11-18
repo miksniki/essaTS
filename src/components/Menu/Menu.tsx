@@ -61,6 +61,19 @@ const Menu: FC = () => {
             .then(files => setEditedSongs(files.files))
     };
 
+    const download = (fileName:any) => {
+        const blob = new Blob(['audio'], {type: 'audio/mpeg'})
+        downloadFile(blob, `${fileName}`);
+    }
+
+    const downloadFile = (blob:any, fileName:any) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href= url;
+        a.download = fileName;
+        a.click();
+    }
+
     const checkboxChange = (e:any) => {
         let checkedSongs = [...valitudLood, e.target.value];
         if(valitudLood.includes(e.target.value )) {
@@ -129,6 +142,7 @@ const Menu: FC = () => {
                             {fileName}
                             </h1>
                             <audio src={'/' + fileName} controls />
+                            <button onClick={() => download(fileName)}>Download</button>
                         </div>
                         )}
                     </div>
