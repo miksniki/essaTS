@@ -50,6 +50,8 @@ const Menu: FC = () => {
             .then(function(data){alert(JSON.stringify(data))
             console.warn(data)
         })
+        getEditedFiles();
+    
     }
 
     const [valitudLood, setValitudLood] = useState<any>([]);
@@ -82,18 +84,33 @@ const Menu: FC = () => {
         setValitudLood(checkedSongs)
     }
 
-    const concatAudio = (valitudLood:any) => {
+    const concatAudio = (valitudLood:string[]) => {
         if (valitudLood.length === 2){
             axios({
             method: "POST",
             url: 'http://localhost:5000/concat',
             data: valitudLood
             })
+            getEditedFiles();
         } else {
             alert("You need to select 2 songs!")
         }
+
+        
     }  
+
+    const deleteAudio = async (fileName:string) => {
+        axios({
+            method: "POST",
+            url: 'http://localhost:5000/delete',
+            data: {
+                files : `${fileName}`
+            }
+        })
+        getEditedFiles();        
+    }
     
+
     return(
         <div className="menu">
             {/* valitud loo preview */}
@@ -143,6 +160,7 @@ const Menu: FC = () => {
                             </h1>
                             <audio src={'/' + fileName} controls />
                             <button onClick={() => download(fileName)}>Download</button>
+                            <button onClick={() => deleteAudio(fileName)}>Delete</button>
                         </div>
                         )}
                     </div>

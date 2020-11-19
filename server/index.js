@@ -136,6 +136,23 @@ app.post('/concat', async (req, res) => {
     });
 });
 
+app.post('/delete', async (req, res) => {
+    let fileName = req.body.files;
+    const fileLocation = `${__dirname}/edited/${fileName}`;
+    if(!fileName) {       
+        res.send({
+            message: 'file doesnt exist!'
+        });
+    } else {  
+        fs.unlink(fileLocation, err => {
+            if (err && err.code == 'ENOUENT') {
+                console.log('File doesnt exist')        
+            } else {
+                console.log('Deleted!')
+            }
+        });
+    }
+})
 
 
 app.listen(5000);
