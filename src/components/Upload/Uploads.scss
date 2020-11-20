@@ -1,0 +1,53 @@
+.uploads {
+    background: rgb(0, 0, 0);
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    margin: 0 auto;
+    padding-top: 8px;
+    padding-bottom: 80px;
+
+    .btn {
+        background: rgb(160, 56, 155);
+        padding-top: 4px
+    }
+    
+    .btn:hover {
+        padding-bottom: 5px;
+        background: black;
+        cursor: pointer;
+        transition: all 0.4s ease 0s;
+        
+    }
+
+    .title1 {
+        padding-top: 7px;
+        text-align: center;
+        color: white;
+    }
+   
+    .form {
+        padding-top: 40px;
+        padding-bottom: 50px;
+        color:white
+    }
+    
+    
+    .uploadedSongs {
+        text-align: center;
+        padding-bottom: 50px;
+        color:rgb(133, 39, 128);
+        .check {
+            margin-left: 20px;
+        }
+    }
+    
+    .editedSongs {
+        text-align: center;
+        padding-top: 50px;
+        padding-bottom: 250px;
+        color:rgb(133, 39, 128);
+        
+    }
+}
+  

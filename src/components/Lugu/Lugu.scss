@@ -1,5 +1,37 @@
 .pildike {
-    width: 180px;
-    margin-left: 230px;
-    height: 110px
+    width: 95px;
+    height: 82.4px;
+    float: right
+}
+
+.pildike:hover {
+    width: 100px;
+    height: 87.4px;
+    transition: all 0.4s ease 0s;
+}
+
+.wrapper {
+    color: rgb(237, 210, 241);
+    padding-right: 210px;
+    background: rgb(63, 19, 61);
+    height: 87.4px;
+    border-style: solid none;
+    border-width: thin;
+    border-color: rgb(194, 102, 212);
+   
+    p {
+        font-size: 17px;
+        padding-top: 30px;
+        text-align: center;
+        margin-left: 110px;
+        border-bottom: 2px solid;
+        border-color: rgb(63, 19, 61)
+    }
+
+}
+
+.wrapper:hover {
+    color: rgb(180, 45, 201);
+    transition: color 0.4s ease 0s;
+    cursor: pointer
 }

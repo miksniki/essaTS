@@ -1,36 +1,43 @@
 .menu {
     display: flex;
-}
-
-.container1 {
-    flex: 4;
-    margin-top: 100px;
-    margin-left: 60px;
-    p {
-        height: 50px;
-        background-color: thistle;
-        text-align: center;
-        letter-spacing: 2px;
-        font-size: 30px
+    background: rgb(194, 102, 212);
+    
+    .container1 {
+        flex: 4;
+        p {
+            height: 50px;
+            background-color: thistle;
+            text-align: center;
+            letter-spacing: 1.5px;
+            font-size: 30px
+        }
+        .title {
+            margin-top:-10px;
+            background: black;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            font-size: 20px;
+            color: rgb(237, 210, 241)
+        }
+        .audio {
+            display: block;
+            width: 100%;
+        }
+    }
+    
+    .container2 {
+        flex: 4;     
+        h1 {
+            text-align: center;
+            color: rgb(237, 210, 241);
+            padding-top: 10px;
+            padding-bottom: 20px;
+            background:  rgb(63, 19, 61)
+        }
+        .click {
+            font-size: 15px
+        }
     }
 }
 
-.container2 {
-    flex: 4;     
-    h1 {
-        height: 80px;
-        text-align: center;
-        color: white;
-        padding-bottom: 21.4px;
-        background: rgb(116, 29, 94)
-    }
-}
-
-.uploadedSongs {
-    padding-bottom: 250px;
-}
-
-.editedSongs {
-    padding-bottom: 250px
-}
 

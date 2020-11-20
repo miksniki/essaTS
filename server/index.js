@@ -89,10 +89,6 @@ app.get('/editedSongs', (req, res) => {
     });
 });
 
-
-// FFMPEG configuration
-
-
 app.get('/:filename/:action', async (req, res) => {
     if (req.params.action === 'split') {   
         const fileName = req.params.filename
